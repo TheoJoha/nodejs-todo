@@ -1,4 +1,4 @@
-const express = require('express')
+import express from "express"
 import {router as todoRouter} from "./todo/index.js"
 
 const app = express()
