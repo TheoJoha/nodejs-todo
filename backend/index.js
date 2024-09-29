@@ -3,6 +3,9 @@ import {router as todoRouter} from "./todo/index.js"
 
 const app = express()
 
+app.use(express.json())    // <==== parse request body as JSON
+
+
 // constants
 const port = 3003
 

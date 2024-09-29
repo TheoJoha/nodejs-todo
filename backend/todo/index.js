@@ -7,8 +7,12 @@ import {listAction,
 const router = Router()
 
 router.get("/", listAction)
-router.get("/delete/:id", removeAction)
+router.delete("/delete/:id", removeAction)
 // router.get("/delete/:id", removeAction)
 router.post("/save", saveAction)
+
+// treat other requests as getting all todos
+router.get("*", listAction)
+
 
 export {router}
