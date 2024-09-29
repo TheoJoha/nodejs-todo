@@ -7,10 +7,10 @@ const app = express()
 const port = 3003
 
 // rotue todo to todo router
-app.use("/", todoRouter)
+app.use("/todo", todoRouter)
 
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/', (req, res) => res.redirect("/todo"))
+// use todo router for other requests as well
+app.use("*", todoRouter)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
