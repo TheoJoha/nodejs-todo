@@ -34,6 +34,7 @@ export async function saveAction(req, res) {
         description: req.body.description,
         time: req.body.time,
         due: due,
+        doneAt: "",
         createdAt: new Date(),
         
     }

@@ -10,6 +10,7 @@ function App() {
   const [showMenu, setShowMenu] = useState(true)
   const [sortDirection, setSortDirection] = useState(true)
   const [listView, setListView] = useState(false)
+  const [showManageTags, setShowManageTags] = useState(false)
 
   // get all todos
   useEffect(() => {
@@ -61,6 +62,9 @@ function App() {
           Sort
         </div>
         <div onClick={switchView} id="switchView">
+          Switch to {listView ? "Post-it view" : "List view"}
+        </div>
+        <div onClick={""} id="switchView">
           Switch to {listView ? "Post-it view" : "List view"}
         </div>
 
