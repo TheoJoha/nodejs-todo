@@ -61,7 +61,7 @@ function App() {
           Sort
         </div>
         <div onClick={switchView} id="switchView">
-          Switch view to {listView ? "Post-it view" : "List view"}
+          Switch to {listView ? "Post-it view" : "List view"}
         </div>
 
         Add item:
