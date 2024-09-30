@@ -1,7 +1,7 @@
 let data = [
-    {id: 1, name: "todo1", description: "...", time: 10},
-    {id: 2, name: "todo2", description: "...", time: 20},
-    {id: 3, name: "todo3", description: "...", time: 30}
+    {id: 1, name: "todo1", description: "...", time: 10, priority: 1, due: "", createdAt: ""},
+    {id: 2, name: "todo2", description: "...", time: 20, priority: 1, due: "", createdAt: ""},
+    {id: 3, name: "todo3", description: "...", time: 30, priority: 3, due: "", createdAt: ""}
 ]
 
 function getNextId() {
@@ -33,7 +33,7 @@ export function remove(id) {
 }
 
 export function save(todo) {
-    if (todo.id === "") {
+    if (todo.id == "" || typeof todo.id == "undefined") {
         insert(todo)
     } else {
         update(todo)

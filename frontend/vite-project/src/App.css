@@ -1,0 +1,74 @@
+/* foundations (body, root, etc)
+body-style is applied in index.css */
+
+
+body {
+  background-color: #282c34;
+  color: white;
+  padding: 40px;
+  font-family: Arial;
+  text-align: center;
+  border: white 1px solid;
+}
+
+#root {
+  border: white 1px solid;
+}
+
+#app {
+  border: white 1px solid;
+}
+
+/* tags further down the html hierarchy
+ */
+ div {
+  margin: 5px;
+  border: white 1px solid;
+}
+
+#menu {
+  border: white 1px solid;
+}
+
+#todos {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1600px;
+}
+
+.todo {
+  background-color: khaki;
+  color: black;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  border: white 1px solid;
+  
+}
+
+/* this sets how todos are displayed in the post-it view */
+.todo-post-it-view {
+  height: 350px;
+  width: 250px;
+}
+
+/* this sets how todos are displayed in the list view */
+.todo-list-view {
+  height: 50px;
+  width: 100%;
+  flex-direction: row;
+}
+
+.todo-item-content {
+  width: 100%;
+  border: white 1px solid;
+}
+
+#todo-item-name {
+  font-size: 1.5em;
+}
+
+#priority {
+  margin-top: auto;
+}
+

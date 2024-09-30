@@ -22,11 +22,20 @@ export async function removeAction(req, res) {
 
 export async function saveAction(req, res) {
 
+    let due = ""
+
+    if (req.body.due) {
+        due = req.body.due
+    }
+
     const todo = {
         id: req.body.id,
         name: req.body.name,
         description: req.body.description,
         time: req.body.time,
+        due: due,
+        createdAt: new Date(),
+        
     }
 
     await save(todo)
