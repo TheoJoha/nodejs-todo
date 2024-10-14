@@ -7,7 +7,6 @@ export async function listAction(req,res) {
 
 export async function removeAction(req, res) {
     const id = parseInt(req.params.id, 10)
-    console.log(id)
     await remove(id)
     res.redirect(req.baseUrl)
 }
@@ -23,21 +22,12 @@ export async function removeAction(req, res) {
 
 export async function saveAction(req, res) {
 
-    const todo = {
-        id: req.body.id,
-        name: req.body.name,
-        priority: req.body.priority,
-        description: req.body.description,
-        time: req.body.time,
-        due: req.body.due | "",
-        tags: req.body.tags,
-        doneAt: req.body.doneAt | "",
-        createdAt: req.body.createdAt | new Date(),
-        completed: req.body.completed,
-        inProgess: req.body.inProgress,
+
+    const category = {
+        name: req.body.tagName
     }
 
-    await save(todo)
+    await save(category)
 
     res.redirect(req.baseUrl)
 }

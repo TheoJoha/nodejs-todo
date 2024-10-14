@@ -1,7 +1,7 @@
 let data = [
-    {id: 1, name: "todo1", description: "...", time: 10, priority: 1, due: "", doneAt: "", createdAt: ""},
-    {id: 2, name: "todo2", description: "...", time: 20, priority: 1, due: "", doneAt: "", createdAt: ""},
-    {id: 3, name: "todo3", description: "...", time: 30, priority: 3, due: "", doneAt: "", createdAt: ""}
+    {id: 1, name: "todo1", description: "...", time: 10, priority: 1, due: "", doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false},
+    {id: 2, name: "todo2", description: "...", time: 20, priority: 1, due: "", doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false},
+    {id: 3, name: "todo3", description: "...", time: 30, priority: 3, due: "", doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false}
 ]
 
 function getNextId() {
@@ -17,6 +17,7 @@ function update(todo) {
     todo.id = parseInt(todo.id, 10)
     const index = data.findIndex((item) => item.id === todo.id)
     data[index] = todo
+    console.log("updating new todo", todo)
 }
 
 export function getAll() {
@@ -33,6 +34,7 @@ export function remove(id) {
 }
 
 export function save(todo) {
+    console.log(todo.id, todo, "create new todo")
     if (todo.id == "" || typeof todo.id == "undefined") {
         insert(todo)
     } else {

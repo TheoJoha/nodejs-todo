@@ -11,7 +11,7 @@ router.get("/", listAction)
 router.delete("/delete/:id", removeAction)
 router.post("/save", saveAction)
 
-// treat other requests as getting all todos
+// treat other requests as getting all categories
 router.get("*", listAction)
 
 
