@@ -15,11 +15,14 @@ function App() {
   // todos
   const [todos, setTodos] = useState([])
   // functionality
-  const [sortDirection, setSortDirection] = useState(true)
+  
   const [listView, setListView] = useState(false)
-  const [showManageTags, setShowManageTags] = useState(false)
   const [categories, setCategories] = useState([])
   const [triggerRender, setTriggerRender] = useState(false)
+  // sort diretction variables
+  const [sortByEstimatedTimeDirection, setSortByEstimatedTimeDirection] = useState(true)
+  const [sortByDueDateDirection, setSortByDueDateDirection] = useState(true)
+  const [sortByPriorityDirection, setSortByPriorityDirection] = useState(true)
   // new tag
   const [newTagName, setNewTagName] = useState("")
   // new todo variables
@@ -34,6 +37,8 @@ function App() {
   const [showMenu, setShowMenu] = useState(false)
   const [showNewTodoMenu, setShowNewTodoMenu] = useState(false)
   const [showFilterMenu, setShowFilterMenu] = useState(false)
+  const [showSortMenu, setShowSortMenu] = useState(false)
+  const [showManageTags, setShowManageTags] = useState(false)
   // other state variables
   const [todoIsEdited, setTodoIsEdited] = useState(false)
   // filter state variables
@@ -93,16 +98,40 @@ function App() {
     setTodoDueDateFilter(e.target.value)
   }
 
-  // sorting function
-  const sortTodos = () => {
+  // sort by priority
+  const sortTodosByPriority = () => {
     let sorted = []
-    if (sortDirection) {
+    if (sortByPriorityDirection) {
       sorted = [...todos].sort((a, b) => b.priority - a.priority)
     } else {
       sorted = [...todos].sort((a, b) => a.priority - b.priority)
     }
     setTodos(sorted)
-    setSortDirection(prev => !prev)
+    setSortByPriorityDirection(prev => !prev)
+  }
+
+  // sort by estimated time
+  const sortTodosByEstimatedTime = () => {
+    let sorted = []
+    if (sortByEstimatedTimeDirection) {
+      sorted = [...todos].sort((a, b) => b.time - a.time)
+    } else {
+      sorted = [...todos].sort((a, b) => a.time - b.time)
+    }
+    setTodos(sorted)
+    setSortByEstimatedTimeDirection(prev => !prev)
+  }
+
+  // sort by due date
+  const sortTodosByDueDate = () => {
+    let sorted = []
+    if (sortByDueDateDirection) {
+      sorted = [...todos].sort((a, b) => b.due - a.due)
+    } else {
+      sorted = [...todos].sort((a, b) => a.due - b.due)
+    }
+    setTodos(sorted)
+    setSortByDueDateDirection(prev => !prev)
   }
 
   // switch between list-view and post-it-view
@@ -337,9 +366,16 @@ function App() {
           {todoIsEdited && <button onClick={() => resetActiveTodo()} >Stop Editing Todo</button>}
         </div>}
 
-        <div onClick={sortTodos} id="sort">
-          Sort
-        </div>
+        {/* Sorting functionality */}
+        <button onClick={() => setShowSortMenu((prev) => !prev)} id="sort-menu-div" >
+          {showSortMenu ? "Hide Sort menu" : "Show Sort menu"}
+        </button>
+        { showSortMenu && <div>
+          <button onClick={sortTodosByPriority}>Sort by priority</button>
+          <button onClick={sortTodosByEstimatedTime} >Sort by estimated time</button>
+          <button onClick={sortTodosByDueDate} >Sort by due date</button>
+        </div>}
+
         {/* Change View */}
         <button onClick={switchView} id="switchView">
           Switch to {listView ? "Post-it view" : "List view"}
