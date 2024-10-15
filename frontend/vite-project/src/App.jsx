@@ -1,8 +1,12 @@
 
 import { useEffect, useState } from 'react'
-import DatePicker from "react-datepicker"
+import DatePicker, {registerLocale} from "react-datepicker"
+import { sv } from 'date-fns/locale/sv';
+registerLocale('sv', sv)
 import './App.css'
 import axios from "axios"
+import 'react-datepicker/dist/react-datepicker.css'
+
 
 
 function App() {
@@ -38,7 +42,7 @@ function App() {
   const [todoTagsFilter, setTodoTagsFilter] = useState([])
   const [todoTimeMinFilter, setTodoTimeMinFilter] = useState("0")
   const [todoTimeMaxFilter, setTodoTimeMaxFilter] = useState(3600 * 24 * 365)
-  const [todoDueDateFilter, setTodoDueDateFilter] = useState("")
+  const [todoDueDateFilter, setTodoDueDateFilter] = useState(new Date(new Date().setFullYear(new Date().getFullYear() + 1)))
 
   /////////////////////////////////////////////////////
   // useEffect hooks
@@ -284,7 +288,13 @@ function App() {
           </div>
           Filter by Due Date:
           <div id="filter-by-due-date-div">
-            Filter by due date (up until): <input  />
+            Filter by due date (up until):<DatePicker
+              locale="sv"
+              id="filter-todos-by-due-date"
+              selected={todoDueDateFilter}
+              onChange={(date) => setTodoDueDateFilter(date)}
+              dateFormat="dd/MM/yyyy"
+            />
           </div>
 
         </div>}
@@ -295,7 +305,16 @@ function App() {
         {showNewTodoMenu && <div id="newTodoMenu">
           <div>Name: <input value={newTodoName} id="newTodoName" onChange={e => setNewTodoName(e.target.value)} /></div>
           <div>Description: <textarea value={newTodoDescription} rows="5" cols="40" id="newTodoDescription" onChange={e => setNewTodoDescription(e.target.value)} /></div>
-          <div>Due Date: <input value={newTodoDue} id="newTodoDue" onChange={e => setNewTodoDue(e.target.value)} placeholder="YYYY-MM-DD" /></div>
+          <div>Due Date:
+            <DatePicker
+              locale="sv"
+              id="newTodoDue"
+              selected={newTodoDue}
+              onChange={(date) => setNewTodoDue(date)}
+              dateFormat="dd/MM/yyyy"
+              minDate={new Date()}
+            />
+          </div>
           <div>Priority: <select
             value={newTodoPriority} // ...force the select's value to match the state variable...
             onChange={e => setNewTodoPriority(e.target.value)} // ... and update the state variable on any change!
@@ -329,7 +348,7 @@ function App() {
           {showManageTags ? "Hide Manage Tags" : "Manage Tags"}
         </button>
 
-          {/* Manage tags */}
+        {/* Manage tags */}
         {showManageTags && <div id="manageTags" >
           <div id="create-new-tag">
             <input onChange={e => setNewTagName(e.target.value)} id="newTagName" /><button onClick={submitTag} >Create new tag</button>
@@ -340,7 +359,7 @@ function App() {
 
       {/* Render all todos */}
       {<div id="todos">
-        {todos && (typeof todoNameFilter === "string" || todoNameFilter) && (typeof todoPriorityFilter === "string" || todoPriorityFilter) && (typeof todoTimeMaxFilter === "string" || todoTimeMaxFilter) && (typeof todoTimeMinFilter === "string" || todoTimeMinFilter) && todos.filter((todo) => todoNameFilter === "" || todo.name.startsWith(todoNameFilter)).filter((todo) => todo.time >= todoTimeMinFilter ? true : todo.time == "" ? true : false).filter(todo => todo.time <= todoTimeMaxFilter ? true : todo.time == "" ? true : false).filter((todo) => { if (todoPriorityFilter == "") { return true } else { return todo.priority == todoPriorityFilter } }).map((todo) => <div
+        {todos && todoDueDateFilter && (typeof todoNameFilter === "string" || todoNameFilter) && (typeof todoPriorityFilter === "string" || todoPriorityFilter) && (typeof todoTimeMaxFilter === "string" || todoTimeMaxFilter) && (typeof todoTimeMinFilter === "string" || todoTimeMinFilter) && todos.filter((todo) => todoNameFilter === "" || todo.name.startsWith(todoNameFilter)).filter((todo) => todo.due <= todoDueDateFilter).filter((todo) => todo.time >= todoTimeMinFilter ? true : todo.time == "" ? true : false).filter(todo => todo.time <= todoTimeMaxFilter ? true : todo.time == "" ? true : false).filter((todo) => { if (todoPriorityFilter == "") { return true } else { return todo.priority == todoPriorityFilter } }).map((todo) => <div
           className={"todo " + (listView ? "todo-list-view " : "todo todo-post-it-view ") + (todo.completed ? "todo-completed " : "")}
           key={todo.id}>
           <div id="todo-item-name" className="todo-item-content">

@@ -1,7 +1,7 @@
 let data = [
-    {id: 1, name: "todo1", description: "...", time: 10, priority: 1, due: "", doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false},
-    {id: 2, name: "todo2", description: "...", time: 20, priority: 1, due: "", doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false},
-    {id: 3, name: "todo3", description: "...", time: 30, priority: 3, due: "", doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false}
+    {id: 1, name: "todo1", description: "...", time: 10, priority: 1, due: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false},
+    {id: 2, name: "todo2", description: "...", time: 20, priority: 1, due: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false},
+    {id: 3, name: "todo3", description: "...", time: 30, priority: 3, due: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), doneAt: "", createdAt: "", tags: [], completed: false, inProgress: false}
 ]
 
 function getNextId() {
