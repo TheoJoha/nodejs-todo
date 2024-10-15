@@ -101,7 +101,7 @@ function App() {
     } else {
       sorted = [...todos].sort((a, b) => a.priority - b.priority)
     }
-    setFilteredTodos(sorted)
+    setTodos(sorted)
     setSortDirection(prev => !prev)
   }
 
