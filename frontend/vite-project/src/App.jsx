@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react'
-import DatePicker, {registerLocale} from "react-datepicker"
+import DatePicker, { registerLocale } from "react-datepicker"
 import { sv } from 'date-fns/locale/sv';
 registerLocale('sv', sv)
 import './App.css'
@@ -15,7 +15,7 @@ function App() {
   // todos
   const [todos, setTodos] = useState([])
   // functionality
-  
+
   const [listView, setListView] = useState(false)
   const [categories, setCategories] = useState([])
   const [triggerRender, setTriggerRender] = useState(false)
@@ -83,19 +83,6 @@ function App() {
   // filter functions
   const filterTodosByName = (e) => {
     setTodoNameFilter(e.target.value)
-  }
-
-  const filterTodosByPriority = (e) => {
-    console.log(e.target.value)
-    setTodoPriorityFilter(e.target.vale)
-  }
-
-  const filterTodosByEstimatedTime = (e) => {
-    setTodoTimeFilter(e.target.value)
-  }
-
-  const filterTodosByDueDate = (e) => {
-    setTodoDueDateFilter(e.target.value)
   }
 
   // sort by priority
@@ -246,6 +233,37 @@ function App() {
     setTodoIsEdited(false)
   }
 
+  // mark as in progress
+  const todoIsInProgress = (id) => {
+    const todoToBeUpdated = todos.filter(todo => todo.id == id)[0]
+    todoToBeUpdated.inProgress = !todoToBeUpdated.inProgress
+    axios.post('http://localhost:3003/todo/save', todoToBeUpdated)
+      .then(function (response) {
+        console.log(response)
+        // get all todos
+        fetch('http://localhost:3003/todo')
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            setTodos(data);
+          })
+          .then(() => {
+            console.log(triggerRender)
+            setTriggerRender(prev => !prev)
+          });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    /* setTodos(prev => prev.map(todo => {
+      if (todo.id == id) {
+        todo.completed = !todo.completed
+      }
+      return todo
+    })) */
+  }
+
   // mark todo as completed
   const todoIsCompleted = (id) => {
     const todoToBeUpdated = todos.filter(todo => todo.id == id)[0]
@@ -370,7 +388,7 @@ function App() {
         <button onClick={() => setShowSortMenu((prev) => !prev)} id="sort-menu-div" >
           {showSortMenu ? "Hide Sort menu" : "Show Sort menu"}
         </button>
-        { showSortMenu && <div>
+        {showSortMenu && <div>
           <button onClick={sortTodosByPriority}>Sort by priority</button>
           <button onClick={sortTodosByEstimatedTime} >Sort by estimated time</button>
           <button onClick={sortTodosByDueDate} >Sort by due date</button>
@@ -404,15 +422,18 @@ function App() {
           <div id="todo-item-description" className="todo-item-content">
             {todo.description}
           </div>
-          <div className="complete-todo" onClick={() => todoIsCompleted(todo.id)} >
+          <button className="complete-todo todo-button" onClick={() => todoIsCompleted(todo.id)} >
             {todo.completed ? "Mark as not completed" : "Mark as completed"}
-          </div>
-          <div className="delete-todo" onClick={() => deleteTodo(todo.id)} id="deleteTodo" >
+          </button>
+          <button className="inProgress-todo todo-button" onClick={() => todoIsInProgress(todo.id)} >
+            {todo.inProgress ? "Mark as not in progress" : "Mark as in progress"}
+          </button>
+          <button className="delete-todo todo-button" onClick={() => deleteTodo(todo.id)} id="deleteTodo" >
             Delete Todo
-          </div>
-          <div className="edit-todo" onClick={() => { setShowMenu(true); setShowNewTodoMenu(true); editTodo(todo) }} id="editTodo" >
+          </button>
+          <button className="edit-todo todo-button" onClick={() => { setShowMenu(true); setShowNewTodoMenu(true); editTodo(todo) }} id="editTodo" >
             Edit Todo
-          </div>
+          </button>
           <div id="priority">
             Priority: {todo.priority == 1 ? "Low" : todo.priority == 2 ? "Medium" : todo.priority == 3 ? "High" : "Critical"}
           </div>

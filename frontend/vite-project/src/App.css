@@ -109,6 +109,11 @@ button:hover {
   background-color: white;
 }
 
+.todo-button {
+  background-color: khaki;
+  color: black;
+}
+
 #priority {
   margin-top: auto;
 }
