@@ -6,6 +6,8 @@ registerLocale('sv', sv)
 import './App.css'
 import axios from "axios"
 import 'react-datepicker/dist/react-datepicker.css'
+import { TfiClose, TfiCheck, TfiCheckBox, TfiFilter, TfiViewList, TfiViewGrid } from "react-icons/tfi";
+import { TbProgressCheck, TbCheck, TbEdit, TbTags } from "react-icons/tb";
 
 
 
@@ -15,7 +17,6 @@ function App() {
   // todos
   const [todos, setTodos] = useState([])
   // functionality
-
   const [listView, setListView] = useState(false)
   const [categories, setCategories] = useState([])
   const [triggerRender, setTriggerRender] = useState(false)
@@ -39,6 +40,7 @@ function App() {
   const [showFilterMenu, setShowFilterMenu] = useState(false)
   const [showSortMenu, setShowSortMenu] = useState(false)
   const [showManageTags, setShowManageTags] = useState(false)
+  const [showGroupActions, setShowGroupActions] = useState(false)
   // other state variables
   const [todoIsEdited, setTodoIsEdited] = useState(false)
   // filter state variables
@@ -48,6 +50,7 @@ function App() {
   const [todoTimeMinFilter, setTodoTimeMinFilter] = useState("0")
   const [todoTimeMaxFilter, setTodoTimeMaxFilter] = useState(3600 * 24 * 365)
   const [todoDueDateFilter, setTodoDueDateFilter] = useState(new Date(new Date().setFullYear(new Date().getFullYear() + 1)))
+  const [todoStatusFilter, setTodoStatusFilter] = useState("all")
 
   /////////////////////////////////////////////////////
   // useEffect hooks
@@ -295,6 +298,10 @@ function App() {
     })) */
   }
 
+  const groupActionOnTodos = () => {
+
+  }
+
 
 
   return (
@@ -335,7 +342,8 @@ function App() {
           </div>
           Filter by Due Date:
           <div id="filter-by-due-date-div">
-            Filter by due date (up until):<DatePicker
+            Filter by due date (up until):
+            <DatePicker
               locale="sv"
               id="filter-todos-by-due-date"
               selected={todoDueDateFilter}
@@ -343,6 +351,27 @@ function App() {
               dateFormat="dd/MM/yyyy"
             />
           </div>
+          <button onClick={() => setTodoPendingFilter(prev => !prev)} >Filter by pending:</button>
+          <div>
+            <select
+              value={todoStatusFilter} // ...force the select's value to match the state variable...
+              onChange={e => setTodoStatusFilter(e.target.value)} // ... and update the state variable on any change!
+            >
+              <option value="pending">Pending</option>
+              <option value="inProgress">In progress</option>
+              <option value="completed">Completed</option>
+              <option value="all">All (no filter)</option>
+            </select>
+          </div>
+
+          {/* Group actions */}
+          {/* <button>{showGroupActions ? "Hide Group actions" : "Show Group actions"}</button>
+          <div>
+            <button>Delete all filtered todos</button>
+            <button>Mark all filtered todos as completed</button>
+            <button>Mark all filtered todos as in progress</button>
+            <button>Mark all filtered todos as pending</button>
+          </div> */}
 
         </div>}
         {/* New Todo */}
@@ -413,7 +442,8 @@ function App() {
 
       {/* Render all todos */}
       {<div id="todos">
-        {todos && todoDueDateFilter && (typeof todoNameFilter === "string" || todoNameFilter) && (typeof todoPriorityFilter === "string" || todoPriorityFilter) && (typeof todoTimeMaxFilter === "string" || todoTimeMaxFilter) && (typeof todoTimeMinFilter === "string" || todoTimeMinFilter) && todos.filter((todo) => todoNameFilter === "" || todo.name.startsWith(todoNameFilter)).filter((todo) => todo.due <= todoDueDateFilter).filter((todo) => todo.time >= todoTimeMinFilter ? true : todo.time == "" ? true : false).filter(todo => todo.time <= todoTimeMaxFilter ? true : todo.time == "" ? true : false).filter((todo) => { if (todoPriorityFilter == "") { return true } else { return todo.priority == todoPriorityFilter } }).map((todo) => <div
+        {/* Filtering and mapping */}
+        {todos && todoDueDateFilter && todoStatusFilter && (typeof todoNameFilter === "string" || todoNameFilter) && (typeof todoPriorityFilter === "string" || todoPriorityFilter) && (typeof todoTimeMaxFilter === "string" || todoTimeMaxFilter) && (typeof todoTimeMinFilter === "string" || todoTimeMinFilter) && todos.filter((todo) => todoNameFilter === "" || todo.name.startsWith(todoNameFilter)).filter((todo) => todoStatusFilter == "all" ? true : todoStatusFilter == "pending" && !todo.completed && !todo.inProgress ? true : todoStatusFilter == "completed" && todo.completed ? true : todoStatusFilter == "inProgress" && todo.inProgress ? true : false).filter((todo) => todo.due <= todoDueDateFilter).filter((todo) => todo.time >= todoTimeMinFilter ? true : todo.time == "" ? true : false).filter(todo => todo.time <= todoTimeMaxFilter ? true : todo.time == "" ? true : false).filter((todo) => { if (todoPriorityFilter == "") { return true } else { return todo.priority == todoPriorityFilter } }).map((todo) => <div
           className={"todo " + (listView ? "todo-list-view " : "todo todo-post-it-view ") + (todo.completed ? "todo-completed " : "")}
           key={todo.id}>
           <div id="todo-item-name" className="todo-item-content">
@@ -422,18 +452,23 @@ function App() {
           <div id="todo-item-description" className="todo-item-content">
             {todo.description}
           </div>
-          <button className="complete-todo todo-button" onClick={() => todoIsCompleted(todo.id)} >
-            {todo.completed ? "Mark as not completed" : "Mark as completed"}
-          </button>
-          <button className="inProgress-todo todo-button" onClick={() => todoIsInProgress(todo.id)} >
-            {todo.inProgress ? "Mark as not in progress" : "Mark as in progress"}
-          </button>
-          <button className="delete-todo todo-button" onClick={() => deleteTodo(todo.id)} id="deleteTodo" >
-            Delete Todo
-          </button>
-          <button className="edit-todo todo-button" onClick={() => { setShowMenu(true); setShowNewTodoMenu(true); editTodo(todo) }} id="editTodo" >
-            Edit Todo
-          </button>
+          <div className="todo-funcionality-container">
+            <button className="complete-todo todo-button" onClick={() => todoIsCompleted(todo.id)} >
+              <TbCheck color="green" size="2rem" />
+            </button>
+            <button className="inProgress-todo todo-button" onClick={() => todoIsInProgress(todo.id)} >
+              <TbProgressCheck color="green" size="1.5rem" />
+            </button>
+            <button className="delete-todo todo-button" onClick={() => deleteTodo(todo.id)} id="deleteTodo" >
+              <TfiClose color="red" size="1.5rem" />
+            </button>
+            <button className="edit-todo todo-button" onClick={() => { setShowMenu(true); setShowNewTodoMenu(true); editTodo(todo) }} id="editTodo" >
+              <TbEdit size="1.5rem" />
+            </button>
+            <div>
+              <TbTags size="1.5rem" /> <div className="todo-tags-per-todo-container" >{todo.tags.map(tag => <div key={tag.id}>{tag.name}</div>)}</div>
+            </div>
+          </div>
           <div id="priority">
             Priority: {todo.priority == 1 ? "Low" : todo.priority == 2 ? "Medium" : todo.priority == 3 ? "High" : "Critical"}
           </div>

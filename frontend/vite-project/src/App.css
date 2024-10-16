@@ -123,3 +123,15 @@ button:hover {
   flex-wrap: wrap;
   flex-direction: row;
 }
+
+.todo-tags-per-todo-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.todo-funcionality-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
