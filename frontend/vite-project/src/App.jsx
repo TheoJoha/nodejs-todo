@@ -41,6 +41,7 @@ function App() {
   const [showSortMenu, setShowSortMenu] = useState(false)
   const [showManageTags, setShowManageTags] = useState(false)
   const [showGroupActions, setShowGroupActions] = useState(false)
+  const [showSavingOptions, setShowSavingOptions] = useState(false)
   // other state variables
   const [todoIsEdited, setTodoIsEdited] = useState(false)
   // filter state variables
@@ -298,8 +299,8 @@ function App() {
     })) */
   }
 
-  const groupActionOnTodos = () => {
-
+  const storeTodosInLocalStorage = () => {
+    localStorage.setItem("myTodos", JSON.stringify(todos))
   }
 
 
@@ -438,6 +439,12 @@ function App() {
           </div>
           {categories.map(tag => <div key={tag.id} onClick={() => deleteTag(tag.id)} className="tag">{tag.name} </div>)}
         </div>}
+
+        {/* Store todos locally */}
+        <button onClick={() => setShowSavingOptions(prev => !prev)} >{showSavingOptions ? "Hide saving options" : "Show saving options"}</button>
+        {showSavingOptions && <div> <button onClick={storeTodosInLocalStorage} >Save todos locally</button> </div>}
+        
+
       </div>}
 
       {/* Render all todos */}
